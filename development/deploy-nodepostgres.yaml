@@ -1,0 +1,76 @@
+#---------------------
+#     ConfigMap
+#---------------------
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-postgres-config
+  labels:
+    app: node-postgres-config
+data:
+  NODEPOSTGRES_PORT: "3080"
+
+---
+#---------------------
+#     Deployment
+#---------------------
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-postgres
+spec:
+  selector:
+    matchLabels:
+      app: node-postgres
+  template:
+    metadata:
+      labels:
+        app: node-postgres
+    spec:
+      containers:
+      - name: app
+        image: vincent/node-postgres:latest
+        imagePullPolicy: Never
+        envFrom:
+          - configMapRef:
+              name: node-users-config
+
+---
+#---------------------
+# NodePort 
+#---------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-postgres-np
+  labels:
+    app: node-postgres
+spec:
+  type: NodePort
+  ports:
+   - port: 3080
+     nodePort: 30020
+  selector:
+   app: node-postgres
+
+---
+#---------------------
+# ClusterIP
+#---------------------
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-postgres-clu
+  labels:
+    app: node-postgres-clu
+spec:
+  type: ClusterIP
+  ports:
+   - port: 3080
+     protocol: TCP
+     targetPort: 3080
+  selector:
+   app:  node-postgres
