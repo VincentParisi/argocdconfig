@@ -1,0 +1,76 @@
+#---------------------
+#     ConfigMap
+#---------------------
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-users-config
+  labels:
+    app: node-users-config
+data:
+  NODEUSERS_PORT: "3070"
+
+---
+#---------------------
+#     Deployment
+#---------------------
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-users
+spec:
+  selector:
+    matchLabels:
+      app: nodejs-users
+  template:
+    metadata:
+      labels:
+        app: nodejs-users
+    spec:
+      containers:
+      - name: app
+        image: vincent/node-users:latest
+        imagePullPolicy: Never
+        envFrom:
+          - configMapRef:
+              name: node-users-config
+
+---
+#---------------------
+# NodePort 
+#---------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-users
+  labels:
+    app: nodejs-users
+spec:
+  type: NodePort
+  ports:
+   - port: 3070
+     nodePort: 30010
+  selector:
+   app: nodejs-users
+
+---
+#---------------------
+# ClusterIP
+#---------------------
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-users-clu
+  labels:
+    app: nodejs-users-clu
+spec:
+  type: ClusterIP
+  ports:
+   - port: 3070
+     protocol: TCP
+     targetPort: 3070
+  selector:
+   app: nodejs-users

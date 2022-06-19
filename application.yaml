@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/VincentParisi/argocdconfig.git
     targetRevision: HEAD
-    path: argocdconfig
+    path: development
   destination: 
     server: https://kubernetes.default.svc
     namespace: development
