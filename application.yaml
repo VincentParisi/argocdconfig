@@ -12,7 +12,7 @@ spec:
     path: argocdconfig
   destination: 
     server: https://kubernetes.default.svc
-    namespace: development--
+    namespace: development
 
   syncPolicy:
     syncOptions:
