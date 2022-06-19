@@ -1,0 +1,76 @@
+#---------------------
+#     ConfigMap
+#---------------------
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  labels:
+    app: frontend-config
+data:
+  FRONTEND_PORT: "3000"
+
+---
+#---------------------
+#     Deployment
+#---------------------
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: app
+        image: vincent/frontend:latest
+        imagePullPolicy: Never
+        envFrom:
+          - configMapRef:
+              name: frontend-config
+
+---
+#---------------------
+# NodePort 
+#---------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-np
+  labels:
+    app: frontend-np
+spec:
+  type: NodePort
+  ports:
+   - port: 3000
+     nodePort: 30011
+  selector:
+   app: frontend
+
+---
+#---------------------
+# ClusterIP
+#---------------------
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-clu
+  labels:
+    app: frontend-clu
+spec:
+  type: ClusterIP
+  ports:
+   - port: 3000
+     protocol: TCP
+     targetPort: 3000
+  selector:
+   app: frontend
