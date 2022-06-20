@@ -54,7 +54,7 @@ spec:
    - port: 3090
      nodePort: 30021
   selector:
-   app: node-postgres
+   app: node-kafka
 
 ---
 #---------------------
@@ -64,14 +64,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: node-postgres-clu
+  name: node-kafka-clu
   labels:
-    app: node-postgres-clu
+    app: node-kafka-clu
 spec:
   type: ClusterIP
   ports:
-   - port: 3080
+   - port: 3090
      protocol: TCP
-     targetPort: 3080
+     targetPort: 3090
   selector:
-   app:  node-postgres
+   app:  node-kafka
