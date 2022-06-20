@@ -1,0 +1,77 @@
+#---------------------
+#     ConfigMap
+#---------------------
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-kafka-config
+  namespace: development
+  labels:
+    app: node-kafka-config
+data:
+  NODEKAFKA_PORT: "3090"
+
+---
+#---------------------
+#     Deployment
+#---------------------
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-kafka
+spec:
+  selector:
+    matchLabels:
+      app: node-kafka
+  template:
+    metadata:
+      labels:
+        app: node-kafka
+    spec:
+      containers:
+      - name: app
+        image: vincent/node-kafka:latest
+        imagePullPolicy: Never
+        envFrom:
+          - configMapRef:
+              name:  node-kafka-config
+
+---
+#---------------------
+# NodePort 
+#---------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-kafka-np
+  labels:
+    app: node-kafka
+spec:
+  type: NodePort
+  ports:
+   - port: 3090
+     nodePort: 30021
+  selector:
+   app: node-postgres
+
+---
+#---------------------
+# ClusterIP
+#---------------------
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-postgres-clu
+  labels:
+    app: node-postgres-clu
+spec:
+  type: ClusterIP
+  ports:
+   - port: 3080
+     protocol: TCP
+     targetPort: 3080
+  selector:
+   app:  node-postgres
