@@ -5,12 +5,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: node-kafka-config
+  name: node-slim-config
   namespace: development
   labels:
-    app: node-kafka-config
+    app: node-slim-config
 data:
-  NODEKAFKA_PORT: "3090"
+  NODESLIM_PORT: "3011"
 
 ---
 #---------------------
@@ -20,23 +20,23 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: node-kafka
+  name: node-slim
 spec:
   selector:
     matchLabels:
-      app: node-kafka
+      app: node-slim
   template:
     metadata:
       labels:
-        app: node-kafka
+        app: node-slim
     spec:
       containers:
       - name: app
-        image: vincent/node-kafka:latest
+        image: vincent/node-slim:latest
         imagePullPolicy: Never
         envFrom:
           - configMapRef:
-              name:  node-kafka-config
+              name:  node-slim-config
 
 ---
 #---------------------
@@ -45,16 +45,16 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: node-kafka-np
+  name: node-slim-np
   labels:
-    app: node-kafka
+    app: node-slim
 spec:
   type: NodePort
   ports:
-   - port: 3090
-     nodePort: 30021
+   - port: 3011
+     nodePort: 30025
   selector:
-   app: node-kafka
+   app: node-slim
 
 ---
 #---------------------
@@ -64,16 +64,16 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: node-kafka-clu
+  name: node-slim-clu
   labels:
-    app: node-kafka-clu
+    app: node-slim-clu
 spec:
   type: ClusterIP
   ports:
-   - port: 3090
+   - port: 3011
      protocol: TCP
-     targetPort: 3090
+     targetPort: 3011
   selector:
-   app:  node-kafka
+   app:  node-slim
 
 
