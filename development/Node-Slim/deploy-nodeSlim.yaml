@@ -47,7 +47,7 @@ kind: Service
 metadata:
   name: node-slim-np
   labels:
-    app: node-slim
+    app: node-slim-np
 spec:
   type: NodePort
   ports:
