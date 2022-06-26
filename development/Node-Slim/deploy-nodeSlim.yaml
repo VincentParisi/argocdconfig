@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: vincent/node-slim:2.0.0
+        image: vincent/node-slim:3.0.0
         imagePullPolicy: Never
         envFrom:
           - configMapRef:
