@@ -54,7 +54,7 @@ spec:
    - port: 3000
      nodePort: 30025
   selector:
-   app: frontend
+   app: node-slim
 
 ---
 #---------------------
