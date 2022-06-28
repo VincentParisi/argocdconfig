@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: vincent/node-users:latest
+        image: vincent/node-users:1.0.0
         imagePullPolicy: Never
         envFrom:
           - configMapRef:
@@ -47,7 +47,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nodejs-users
+  name: nodejs-users-np
   namespace: development
   labels:
     app: nodejs-users
