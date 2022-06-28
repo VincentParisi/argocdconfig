@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: vincent/node-users:1.0.0
+        image: vincent/node-users:2.0.0
         imagePullPolicy: Never
         envFrom:
           - configMapRef:
