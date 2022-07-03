@@ -11,7 +11,7 @@ metadata:
   namespace: development
 
 data:
-  NODE_USERS_PORT: "3060"
+  NODE_USERS_PORT: "3070"
   USERS_VERSION : "1.0"
 
 ---
