@@ -11,6 +11,8 @@ metadata:
     app: node-kafka-config
 data:
   NODEKAFKA_PORT: "3090"
+  NODE_KAFKA_FILE: /app/kafka.txt 
+  KAFKA_VERSION: 1.0
 
 ---
 #---------------------
