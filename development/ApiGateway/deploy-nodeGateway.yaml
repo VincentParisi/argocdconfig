@@ -56,7 +56,7 @@ spec:
   type: NodePort
   ports:
    - port: 3061
-     nodePort: 30030
+     nodePort: 30050
   selector:
    app: node-gateway
 
