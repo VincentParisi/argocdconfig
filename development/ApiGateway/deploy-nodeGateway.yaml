@@ -1,0 +1,83 @@
+#---------------------
+#     ConfigMap
+#---------------------
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-gateway-config
+  namespace: development
+  labels:
+    app: node-gateway-config
+data:
+  APIGATEWAY_VERSION: "1.0"
+  NODE_USER_URL:  http://nodejs-users-clu:3070/list
+  NODE_KAFKA_URL: http://node-kafka-clu:3090/read
+  APIGATEWAY_PORT: "3061"
+
+
+---
+#---------------------
+#     Deployment
+#---------------------
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-gateway
+spec:
+  selector:
+    matchLabels:
+      app: node-gateway
+  template:
+    metadata:
+      labels:
+        app: node-gateway
+    spec:
+      containers:
+      - name: app
+        image: vincent/node-gateway:latest
+        imagePullPolicy: Never
+        envFrom:
+          - configMapRef:
+              name:  node-gateway-config
+
+---
+#---------------------
+# NodePort 
+#---------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-gateway-np
+  labels:
+    app: node-gateway
+spec:
+  type: NodePort
+  ports:
+   - port: 3061
+     nodePort: 30030
+  selector:
+   app: node-gateway
+
+---
+#---------------------
+# ClusterIP
+#---------------------
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-gateway-clu
+  labels:
+    app: node-gateway-clu
+spec:
+  type: ClusterIP
+  ports:
+   - port: 3061
+     protocol: TCP
+     targetPort: 3061
+  selector:
+   app:  node-gateway
+
+
