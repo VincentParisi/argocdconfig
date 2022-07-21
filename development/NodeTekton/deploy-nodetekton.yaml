@@ -56,7 +56,7 @@ spec:
   type: NodePort
   ports:
    - port: 3010
-     nodePort: 30049
+     nodePort: 30059
   selector:
    app: node-tekton
 
@@ -68,7 +68,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: mytest
+#  namespace: mytest
   name: node-tekton-clu
   labels:
     app: node-tekton-clu
